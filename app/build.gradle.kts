@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.fitlog"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.fitlog"
@@ -63,4 +63,13 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("org.orbit-mvi:orbit-core:7.1.0")
+    // or, if on Android:
+    implementation("org.orbit-mvi:orbit-viewmodel:7.1.0")
+    // If using Jetpack Compose include
+    implementation("org.orbit-mvi:orbit-compose:7.1.0")
+
+    // Tests
+    testImplementation("org.orbit-mvi:orbit-test:7.1.0")
 }
