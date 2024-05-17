@@ -1,5 +1,9 @@
 package com.example.fitlog.ui.calendar.composable
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -263,7 +267,11 @@ private fun LazyItemScope.ExerciseInformation(exercise: Exercise) {
             )
         }
     }
-    if (expanded) {
+    AnimatedVisibility(
+        visible = expanded,
+        enter = expandVertically(tween(400)),
+        exit = shrinkVertically(tween(400))
+    ) {
         Column {
             exercise.sets.mapIndexed { index, exerciseSet ->
                 ExerciseSetInformation(
