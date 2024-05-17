@@ -6,15 +6,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -23,7 +29,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fitlog.common.Exercise
+import com.example.fitlog.common.ExerciseSet
 import com.example.fitlog.common.displayText
 import com.example.fitlog.common.rememberFirstCompletelyVisibleMonth
 import com.example.fitlog.ui.calendar.CalendarViewModel
@@ -49,6 +60,7 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+
 
 private val toolbarColor = ToolbarColor
 private val itemBackgroundColor = ItemBackgroundColor
@@ -122,7 +134,12 @@ fun CalendarScreen(
                     )
                 },
             )
-//            Divider(color = pageBackgroundColor)
+            Divider(color = pageBackgroundColor)
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(items = state.exercisesInSelection) { exercise ->
+                    ExerciseInformation(exercise = exercise)
+                }
+            }
         }
     }
 }
@@ -194,6 +211,120 @@ private fun MonthHeader(
                 color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
                 fontWeight = FontWeight.Light,
+            )
+        }
+    }
+}
+
+private val ExerciseInformationFontSize = 15.sp
+
+@Composable
+private fun LazyItemScope.ExerciseInformation(exercise: Exercise) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier
+            .fillParentMaxWidth()
+            .height(IntrinsicSize.Max)
+            .clickable { expanded = !expanded },
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .background(color = exercise.color)
+                .fillParentMaxWidth(1 / 18f)
+                .aspectRatio(1 / 3f)
+        )
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = exercise.name,
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = ExerciseInformationFontSize,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(.3f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${exercise.numOfSets} 세트",
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = ExerciseInformationFontSize,
+            )
+        }
+    }
+    if (expanded) {
+        Column {
+            exercise.sets.mapIndexed { index, exerciseSet ->
+                ExerciseSetInformation(
+                    setInfo = exerciseSet,
+                    setNum = index + 1
+                )
+            }
+        }
+    }
+    Divider(color = pageBackgroundColor, thickness = 2.dp)
+}
+
+@Composable
+fun ExerciseSetInformation(
+    setInfo: ExerciseSet,
+    setNum: Int
+) {
+    Row(
+        modifier = Modifier
+            .height(IntrinsicSize.Max)
+    ) {
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "$setNum 세트",
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = 15.sp,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${setInfo.weight} kg",
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = 15.sp,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "${setInfo.reps} 회",
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = 15.sp,
             )
         }
     }
