@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.fitlog"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -69,6 +69,9 @@ dependencies {
     implementation("org.orbit-mvi:orbit-viewmodel:7.1.0")
     // If using Jetpack Compose include
     implementation("org.orbit-mvi:orbit-compose:7.1.0")
+
+    // kizitonwose-calendar
+    implementation("com.kizitonwose.calendar:compose:2.5.1")
 
     // Tests
     testImplementation("org.orbit-mvi:orbit-test:7.1.0")
