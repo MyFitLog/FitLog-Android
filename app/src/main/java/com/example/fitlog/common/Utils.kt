@@ -134,3 +134,8 @@ fun DayOfWeek.displayText(uppercase: Boolean = false): String {
         if (uppercase) value.uppercase(Locale.KOREA) else value
     }
 }
+
+fun isDoubleFormat(str: String): Boolean {
+    val weightRegex = """^(1000(\.0+)?|0|[0-9]?[0-9]?[0-9](\.\d+)?)$""".toRegex()
+    return weightRegex.matches(str)
+}
