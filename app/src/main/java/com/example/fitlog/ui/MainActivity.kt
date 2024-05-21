@@ -1,4 +1,4 @@
-package com.example.fitlog
+package com.example.fitlog.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
