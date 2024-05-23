@@ -8,7 +8,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
 class FitLogApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         startKoin {

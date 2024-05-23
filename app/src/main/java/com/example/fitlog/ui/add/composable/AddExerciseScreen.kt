@@ -21,11 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.fitlog.R
 import com.example.fitlog.ui.add.AddExerciseViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExerciseScreen(
-    viewModel: AddExerciseViewModel
+    viewModel: AddExerciseViewModel = koinViewModel()
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
 

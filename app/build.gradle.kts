@@ -65,10 +65,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // oribit
     implementation("org.orbit-mvi:orbit-core:7.1.0")
-    // or, if on Android:
     implementation("org.orbit-mvi:orbit-viewmodel:7.1.0")
-    // If using Jetpack Compose include
     implementation("org.orbit-mvi:orbit-compose:7.1.0")
 
     // kizitonwose-calendar
@@ -83,7 +82,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // koin
-    val koinVersion = "3.1.2"
+    val koinVersion = "3.6.0-wasm-alpha2"
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
     // Tests
