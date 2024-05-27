@@ -85,6 +85,10 @@ dependencies {
     val koinVersion = "3.6.0-wasm-alpha2"
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
+    // navigation
+    val navVersion = "2.7.7"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
     // Tests
     testImplementation("org.orbit-mvi:orbit-test:7.1.0")
 }

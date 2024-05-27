@@ -12,24 +12,24 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.fitlog.R
-import com.example.fitlog.ui.add.AddExerciseViewModel
-import org.koin.androidx.compose.koinViewModel
+import com.example.fitlog.ui.add.AddExerciseState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExerciseScreen(
-    viewModel: AddExerciseViewModel = koinViewModel()
+    state: AddExerciseState,
+    changeExerciseName: (String) -> Unit,
+    changeNumOfSet: (Int) -> Unit,
+    changeWeight: (Int, String) -> Unit,
+    changeReps: (Int, Int) -> Unit,
+    removeSetInfo: (Int) -> Unit,
 ) {
-    val state by viewModel.container.stateFlow.collectAsState()
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,7 +40,7 @@ fun AddExerciseScreen(
             Box(modifier = Modifier.weight(4f)) {
                 OutlinedTextField(
                     value = state.exerciseName,
-                    onValueChange = { viewModel.changeExerciseName(it) },
+                    onValueChange = { changeExerciseName(it) },
                     label = { Text(text = "운동 종목") }
                 )
             }
@@ -58,13 +58,13 @@ fun AddExerciseScreen(
                     index = index,
                     weight = state.setInfo[index].weight,
                     reps = state.setInfo[index].reps,
-                    changeWeight = { idx, weight -> viewModel.changeWeight(idx, weight) },
-                    changeReps = { idx, reps -> viewModel.changeReps(idx, reps) },
-                    removeSetInfo = { idx -> viewModel.removeSetInfo(idx) }
+                    changeWeight = { idx, weight -> changeWeight(idx, weight) },
+                    changeReps = { idx, reps -> changeReps(idx, reps) },
+                    removeSetInfo = { idx -> removeSetInfo(idx) }
                 )
             }
         }
-        IconButton(onClick = { viewModel.changeNumOfSet(state.numOfSet + 1) }) {
+        IconButton(onClick = { changeNumOfSet(state.numOfSet + 1) }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_add_circle),
                 contentDescription = "add setInfo"
