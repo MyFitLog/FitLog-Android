@@ -22,16 +22,18 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,15 +42,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fitlog.R
 import com.example.fitlog.common.Exercise
 import com.example.fitlog.common.SetInfo
 import com.example.fitlog.common.displayText
 import com.example.fitlog.common.rememberFirstCompletelyVisibleMonth
-import com.example.fitlog.ui.calendar.CalendarViewModel
+import com.example.fitlog.ui.calendar.CalendarState
 import com.example.fitlog.ui.theme.ItemBackgroundColor
 import com.example.fitlog.ui.theme.PageBackgroundColor
 import com.example.fitlog.ui.theme.TextGray
@@ -74,9 +78,10 @@ private val inActiveTextColor = TextGrayLight
 
 @Composable
 fun CalendarScreen(
-    viewModel: CalendarViewModel
+    state: CalendarState,
+    selectDay: (CalendarDay?) -> Unit,
+    moveAddExercise: () -> Unit,
 ) {
-    val state by viewModel.container.stateFlow.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
 //    StatusBarColorUpdateEffect(toolbarColor)
@@ -84,6 +89,7 @@ fun CalendarScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(pageBackgroundColor),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val calendarState = rememberCalendarState(
             startMonth = state.startMonth,
@@ -95,7 +101,7 @@ fun CalendarScreen(
         val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
         LaunchedEffect(visibleMonth) {
             // Clear selection if we scroll to a new month.
-            viewModel.selectDay(null)
+            selectDay(null)
         }
 
         // Draw light content on dark background.
@@ -127,7 +133,7 @@ fun CalendarScreen(
                             isSelected = state.selection == day,
                             colors = colors,
                         ) { clicked ->
-                            viewModel.selectDay(clicked)
+                            selectDay(clicked)
                         }
                     }
                 },
@@ -145,7 +151,20 @@ fun CalendarScreen(
                 }
             }
         }
+        if (state.selection != null) {
+            FloatingActionButton(
+                onClick = { moveAddExercise() },
+                shape = CircleShape
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add_circle),
+                    contentDescription = "add new Exercise"
+                )
+            }
+        }
+
     }
+
 }
 
 @Composable
