@@ -10,8 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.fitlog.ui.calendar.CalendarViewModel
-import com.example.fitlog.ui.calendar.composable.CalendarScreen
+import com.example.fitlog.ui.add.composable.AddExerciseScreen
 import com.example.fitlog.ui.theme.FitLogTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +20,8 @@ class MainActivity : ComponentActivity() {
             FitLogTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    CalendarScreen(viewModel = CalendarViewModel())
+//                    CalendarScreen(viewModel = CalendarViewModel())
+                    AddExerciseScreen()
                 }
             }
         }

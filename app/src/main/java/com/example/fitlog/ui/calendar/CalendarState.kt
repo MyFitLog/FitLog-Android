@@ -1,7 +1,7 @@
 package com.example.fitlog.ui.calendar
 
 import com.example.fitlog.common.Exercise
-import com.example.fitlog.common.ExerciseSet
+import com.example.fitlog.common.SetInfo
 import com.example.fitlog.ui.theme.Purple80
 import com.example.fitlog.ui.theme.PurpleGrey40
 import com.kizitonwose.calendar.core.CalendarDay
@@ -21,10 +21,10 @@ data class CalendarState(
             "벤치프레스",
             3,
             listOf(
-                ExerciseSet("벤치프레스", 50, 10),
-                ExerciseSet("벤치프레스", 50, 10),
-                ExerciseSet("벤치프레스", 50, 10),
-                ExerciseSet("벤치프레스", 50, 10),
+                SetInfo("50", 10),
+                SetInfo( "50", 10),
+                SetInfo("50", 10),
+                SetInfo("50", 10),
             ),
             Purple80
         ),
@@ -32,10 +32,10 @@ data class CalendarState(
             "렛 풀 다운",
             3,
             listOf(
-                ExerciseSet("렛 풀 다운", 50, 10),
-                ExerciseSet("렛 풀 다운", 50, 10),
-                ExerciseSet("렛 풀 다운", 50, 10),
-                ExerciseSet("렛 풀 다운", 50, 10),
+                SetInfo("50", 10),
+                SetInfo( "50", 10),
+                SetInfo( "50", 10),
+                SetInfo("50", 10),
             ),
             PurpleGrey40
         ),
@@ -43,10 +43,10 @@ data class CalendarState(
             "이지바 트라이셉스 익스텐션",
             3,
             listOf(
-                ExerciseSet("이지바 트라이셉스 익스텐션", 50, 10),
-                ExerciseSet("이지바 트라이셉스 익스텐션", 50, 10),
-                ExerciseSet("이지바 트라이셉스 익스텐션", 50, 10),
-                ExerciseSet("이지바 트라이셉스 익스텐션", 50, 10),
+                SetInfo("50", 10),
+                SetInfo( "50", 10),
+                SetInfo( "50", 10),
+                SetInfo("50", 10),
             ),
             androidx.compose.ui.graphics.Color.Green
         ),

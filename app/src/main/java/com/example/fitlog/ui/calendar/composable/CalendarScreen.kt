@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitlog.common.Exercise
-import com.example.fitlog.common.ExerciseSet
+import com.example.fitlog.common.SetInfo
 import com.example.fitlog.common.displayText
 import com.example.fitlog.common.rememberFirstCompletelyVisibleMonth
 import com.example.fitlog.ui.calendar.CalendarViewModel
@@ -286,7 +286,7 @@ private fun LazyItemScope.ExerciseInformation(exercise: Exercise) {
 
 @Composable
 fun ExerciseSetInformation(
-    setInfo: ExerciseSet,
+    setInfo: SetInfo,
     setNum: Int
 ) {
     Row(
