@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.kizitonwose.calendar.core.CalendarDay
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
@@ -22,5 +23,9 @@ class CalendarViewModel : ContainerHost<CalendarState, CalendarSideEffect>, View
         reduce {
             state.copy(selection = day)
         }
+    }
+
+    fun moveToAddExercise() = intent {
+        postSideEffect(CalendarSideEffect.NavigateToAddExercise)
     }
 }

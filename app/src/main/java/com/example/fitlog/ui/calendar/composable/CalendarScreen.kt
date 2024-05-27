@@ -22,9 +22,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -39,10 +42,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fitlog.R
 import com.example.fitlog.common.Exercise
 import com.example.fitlog.common.SetInfo
 import com.example.fitlog.common.displayText
@@ -74,7 +79,8 @@ private val inActiveTextColor = TextGrayLight
 @Composable
 fun CalendarScreen(
     state: CalendarState,
-    selectDay: (CalendarDay?) -> Unit
+    selectDay: (CalendarDay?) -> Unit,
+    moveAddExercise: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -83,6 +89,7 @@ fun CalendarScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(pageBackgroundColor),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val calendarState = rememberCalendarState(
             startMonth = state.startMonth,
@@ -144,7 +151,20 @@ fun CalendarScreen(
                 }
             }
         }
+        if (state.selection != null) {
+            FloatingActionButton(
+                onClick = { moveAddExercise() },
+                shape = CircleShape
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add_circle),
+                    contentDescription = "add new Exercise"
+                )
+            }
+        }
+
     }
+
 }
 
 @Composable

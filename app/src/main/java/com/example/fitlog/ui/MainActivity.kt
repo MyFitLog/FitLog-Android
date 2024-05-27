@@ -8,17 +8,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fitlog.ui.add.AddExerciseViewModel
 import com.example.fitlog.ui.add.composable.AddExerciseScreen
+import com.example.fitlog.ui.calendar.CalendarSideEffect
 import com.example.fitlog.ui.calendar.CalendarViewModel
 import com.example.fitlog.ui.calendar.composable.CalendarScreen
 import com.example.fitlog.ui.theme.FitLogTheme
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.Calendar.route) {
-                        addCalendar()
+                        addCalendar(navController)
                         addNewExercise()
                     }
                 }
@@ -38,14 +41,21 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun NavGraphBuilder.addCalendar() {
+fun NavGraphBuilder.addCalendar(navController: NavController) {
     composable(route = Screen.Calendar.route) {
         val viewModel: CalendarViewModel = koinViewModel()
         val state by viewModel.collectAsState()
-
+        viewModel.collectSideEffect {
+            when (it) {
+                is CalendarSideEffect.NavigateToAddExercise -> {
+                    navController.navigate(route = Screen.AddExercise.route)
+                }
+            }
+        }
         CalendarScreen(
             state = state,
-            selectDay = { day -> viewModel.selectDay(day) }
+            selectDay = { day -> viewModel.selectDay(day) },
+            moveAddExercise = { viewModel.moveToAddExercise() }
         )
     }
 }
