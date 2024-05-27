@@ -20,8 +20,10 @@ class CalendarViewModel : ContainerHost<CalendarState, CalendarSideEffect>, View
 //    }
 
     fun selectDay(day: CalendarDay?) = intent {
+        val curSelection = state.selection
         reduce {
-            state.copy(selection = day)
+            if (curSelection == day) state.copy(selection = null)
+            else state.copy(selection = day)
         }
     }
 
