@@ -1,14 +1,16 @@
 package com.example.fitlog.ui.add
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import com.example.fitlog.common.SetInfo
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-
+@OptIn(ExperimentalMaterial3Api::class)
 class AddExerciseViewModel : ContainerHost<AddExerciseState, AddExerciseSideEffect>, ViewModel() {
     override val container = container<AddExerciseState, AddExerciseSideEffect>(AddExerciseState())
+
 
     fun changeExerciseName(text: String) = intent {
         reduce {
@@ -54,4 +56,10 @@ class AddExerciseViewModel : ContainerHost<AddExerciseState, AddExerciseSideEffe
         }
     }
 
+    fun changeShowDialog() = intent {
+        val curShowDialog = state.showDialog
+        reduce {
+            state.copy(showDialog = !curShowDialog)
+        }
+    }
 }
