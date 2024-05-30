@@ -7,6 +7,7 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+
 @OptIn(ExperimentalMaterial3Api::class)
 class AddExerciseViewModel : ContainerHost<AddExerciseState, AddExerciseSideEffect>, ViewModel() {
     override val container = container<AddExerciseState, AddExerciseSideEffect>(AddExerciseState())
@@ -18,9 +19,18 @@ class AddExerciseViewModel : ContainerHost<AddExerciseState, AddExerciseSideEffe
         }
     }
 
-    fun changeNumOfSet(num: Int) = intent {
+    fun addSet() = intent {
+        val curNumOfSet = state.numOfSet
+        val info = state.setInfo + listOf(SetInfo("", 0))
         reduce {
-            state.copy(numOfSet = num, setInfo = List(num) { SetInfo("", 0) })
+            state.copy(numOfSet = curNumOfSet + 1, setInfo = info)
+        }
+    }
+
+    fun removeSetInfo(index: Int) = intent {
+        val info = state.setInfo.filterIndexed { idx, _ -> idx != index }
+        reduce {
+            state.copy(setInfo = info)
         }
     }
 
@@ -43,16 +53,6 @@ class AddExerciseViewModel : ContainerHost<AddExerciseState, AddExerciseSideEffe
         }
         reduce {
             state.copy(setInfo = info)
-        }
-    }
-
-    fun removeSetInfo(index: Int) = intent {
-        val info = state.setInfo.toMutableList().apply {
-            removeAt(index)
-        }
-        val originalNum = state.numOfSet
-        reduce {
-            state.copy(setInfo = info, numOfSet = originalNum - 1)
         }
     }
 

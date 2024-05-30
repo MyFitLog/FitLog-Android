@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 fun SetInfoList(
     numOfSet: Int,
     setInfo: List<SetInfo>,
-    changeNumOfSet: (Int) -> Unit,
+    addSet: () -> Unit,
     changeWeight: (Int, String) -> Unit,
     changeReps: (Int, Int) -> Unit,
     removeSetInfo: (Int) -> Unit,
@@ -64,7 +64,7 @@ fun SetInfoList(
         }
         Spacer(modifier = Modifier.height(8.dp)) // 버튼과 항목 사이에 간격 추가
         IconButton(
-            onClick = { changeNumOfSet(numOfSet + 1) },
+            onClick = addSet,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Icon(

@@ -33,7 +33,7 @@ import com.example.fitlog.ui.add.AddExerciseState
 fun AddExerciseScreen(
     state: AddExerciseState,
     changeExerciseName: (String) -> Unit,
-    changeNumOfSet: (Int) -> Unit,
+    addSet: () -> Unit,
     changeWeight: (Int, String) -> Unit,
     changeReps: (Int, Int) -> Unit,
     removeSetInfo: (Int) -> Unit,
@@ -94,7 +94,7 @@ fun AddExerciseScreen(
         SetInfoList(
             numOfSet = state.numOfSet,
             setInfo = state.setInfo,
-            changeNumOfSet = changeNumOfSet,
+            addSet = addSet,
             changeWeight = changeWeight,
             changeReps = changeReps,
             removeSetInfo = removeSetInfo

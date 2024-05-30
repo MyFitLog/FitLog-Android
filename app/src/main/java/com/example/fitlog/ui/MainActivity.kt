@@ -68,7 +68,7 @@ fun NavGraphBuilder.addNewExercise() {
         AddExerciseScreen(
             state = state,
             changeExerciseName = { name -> viewModel.changeExerciseName(name) },
-            changeNumOfSet = { num -> viewModel.changeNumOfSet(num) },
+            addSet = { viewModel.addSet() },
             changeReps = { idx, reps -> viewModel.changeReps(idx, reps) },
             changeWeight = { idx, weight -> viewModel.changeWeight(idx, weight) },
             removeSetInfo = { idx -> viewModel.removeSetInfo(idx) },
