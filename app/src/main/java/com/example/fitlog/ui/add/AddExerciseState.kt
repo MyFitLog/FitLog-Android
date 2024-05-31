@@ -1,11 +1,10 @@
 package com.example.fitlog.ui.add
 
 import android.graphics.Color
-import androidx.compose.material3.ExperimentalMaterial3Api
 import com.example.fitlog.common.SetInfo
 import java.time.LocalDate
 
-data class AddExerciseState @OptIn(ExperimentalMaterial3Api::class) constructor(
+data class AddExerciseState constructor(
     val exerciseName: String = "",
     val numOfSet: Int = 1,
     val expanded: Boolean = false,
