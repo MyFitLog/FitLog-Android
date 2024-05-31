@@ -15,7 +15,6 @@ val appModule = module {
 }
 
 val viewModelModule = module {
-//    viewModel { AddExerciseViewModel(get()) }
     viewModelOf(::AddExerciseViewModel)
     viewModelOf(::CalendarViewModel)
 }

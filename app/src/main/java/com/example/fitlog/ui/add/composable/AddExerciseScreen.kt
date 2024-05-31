@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.example.fitlog.ui.add.AddExerciseState
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExerciseScreen(
     state: AddExerciseState,
@@ -143,7 +142,9 @@ fun MyDatePickerDialog(
     changeShowDialog: () -> Unit,
     selectDay: (LocalDate) -> Unit
 ) {
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis()
+    )
 
     LaunchedEffect(datePickerState.selectedDateMillis) {
         val selectedDateMillis = datePickerState.selectedDateMillis

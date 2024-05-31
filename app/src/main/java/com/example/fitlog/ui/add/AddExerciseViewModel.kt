@@ -27,7 +27,10 @@ class AddExerciseViewModel(
 
     fun addSet() = intent {
         val curNumOfSet = state.numOfSet
-        val info = state.setInfo + listOf(SetInfo("", 0))
+        val newSet =
+            if (state.numOfSet == 0) SetInfo()
+            else SetInfo(state.setInfo.last().weight, state.setInfo.last().reps)
+        val info = state.setInfo + newSet
         reduce {
             state.copy(numOfSet = curNumOfSet + 1, setInfo = info)
         }
