@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitlog.ui.add.AddExerciseState
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,20 +40,14 @@ fun AddExerciseScreen(
     changeReps: (Int, Int) -> Unit,
     removeSetInfo: (Int) -> Unit,
     changeShowDialog: () -> Unit,
+    addExercise: () -> Unit,
+    selectDay: (LocalDate) -> Unit
 ) {
-    val datePickerState = rememberDatePickerState()
-
-
-    if (state.showDialog) {
-        DatePickerDialog(
-            onDismissRequest = changeShowDialog,
-            confirmButton = { /*TODO*/ },
-        ) {
-            DatePicker(
-                state = datePickerState,
-            )
-        }
-    }
+    MyDatePickerDialog(
+        showDialog = state.showDialog,
+        changeShowDialog = changeShowDialog,
+        selectDay = selectDay
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -104,9 +100,9 @@ fun AddExerciseScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-        Button(
+        Button(     // 운동 정보 추가 버튼
             shape = RectangleShape,
-            onClick = { /*TODO*/ },
+            onClick = addExercise,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
@@ -137,5 +133,34 @@ fun ReadonlyTextField(
                 .alpha(0f)
                 .clickable(onClick = onClick)
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDatePickerDialog(
+    showDialog: Boolean,
+    changeShowDialog: () -> Unit,
+    selectDay: (LocalDate) -> Unit
+) {
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = System.currentTimeMillis())
+
+    LaunchedEffect(datePickerState.selectedDateMillis) {
+        val selectedDateMillis = datePickerState.selectedDateMillis
+        if (selectedDateMillis != null) {
+            val selectedDate = LocalDate.ofEpochDay(selectedDateMillis / (24 * 60 * 60 * 1000))
+            selectDay(selectedDate)
+        }
+    }
+
+    if (showDialog) {
+        DatePickerDialog(
+            onDismissRequest = changeShowDialog,
+            confirmButton = { /*TODO*/ },
+        ) {
+            DatePicker(
+                state = datePickerState,
+            )
+        }
     }
 }

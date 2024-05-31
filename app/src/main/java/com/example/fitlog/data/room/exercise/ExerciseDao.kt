@@ -14,11 +14,17 @@ interface ExerciseDao {
     suspend fun getExerciseByDate(date: String): ExerciseWithSetInfo
 
     @Insert
-    suspend fun insertExercise(exercise: ExerciseEntity)
+    suspend fun insertExercise(exercise: ExerciseEntity): Long
 
     @Delete
     suspend fun deleteExercise(exercise: ExerciseEntity)
 
     @Update
     suspend fun updateExercise(exercise: ExerciseEntity)
+
+    @Insert
+    suspend fun insertSets(sets: List<SetEntity>)
+
+    @Update
+    suspend fun updateSets(sets: List<SetEntity>)
 }
