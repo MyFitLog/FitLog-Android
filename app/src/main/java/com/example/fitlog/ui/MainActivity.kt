@@ -56,6 +56,7 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
         CalendarScreen(
             state = state,
             selectDay = { day -> viewModel.selectDay(day) },
+            fetchData = { yearMonth -> viewModel.fetchData(yearMonth) },
             moveAddExercise = { viewModel.moveToAddExercise() }
         )
     }

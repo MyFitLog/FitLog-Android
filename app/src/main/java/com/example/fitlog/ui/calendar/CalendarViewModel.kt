@@ -40,7 +40,7 @@ class CalendarViewModel(
         postSideEffect(CalendarSideEffect.NavigateToAddExercise)
     }
 
-    private fun fetchData(yearMonth: YearMonth) = intent {
+    fun fetchData(yearMonth: YearMonth) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             val exerciseInSelectedData = exerciseRepository.getExercisesByDate(yearMonth)
             reduce {

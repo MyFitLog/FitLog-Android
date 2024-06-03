@@ -66,8 +66,10 @@ import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.YearMonth
 
 private val toolbarColor = ToolbarColor
 private val itemBackgroundColor = ItemBackgroundColor
@@ -79,6 +81,7 @@ private val inActiveTextColor = TextGrayLight
 fun CalendarScreen(
     state: CalendarState,
     selectDay: (CalendarDay?) -> Unit,
+    fetchData: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -100,6 +103,7 @@ fun CalendarScreen(
         val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
         LaunchedEffect(visibleMonth) {
             selectDay(null)
+            fetchData(visibleMonth.yearMonth)
         }
 
         // Draw light content on dark background.
@@ -110,13 +114,13 @@ fun CalendarScreen(
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
-                    coroutineScope.launch {
-                        calendarState.animateScrollToMonth(state.currentMonth.previousMonth)
+                    coroutineScope.launch(Dispatchers.Main) {
+                        calendarState.animateScrollToMonth(visibleMonth.yearMonth.previousMonth)
                     }
                 },
                 goToNext = {
-                    coroutineScope.launch {
-                        calendarState.animateScrollToMonth(state.currentMonth.nextMonth)
+                    coroutineScope.launch(Dispatchers.Main) {
+                        calendarState.animateScrollToMonth(calendarState.firstVisibleMonth.yearMonth.nextMonth)
                     }
                 },
             )
