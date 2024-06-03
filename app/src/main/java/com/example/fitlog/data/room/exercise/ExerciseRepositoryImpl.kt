@@ -1,12 +1,34 @@
 package com.example.fitlog.data.room.exercise
 
+import androidx.compose.ui.graphics.Color
+import com.example.fitlog.common.Exercise
 import com.example.fitlog.common.SetInfo
+import java.time.YearMonth
 
 class ExerciseRepositoryImpl(
     private val exerciseDao: ExerciseDao
 ) : ExerciseRepository {
-    override suspend fun getExerciseByDate(date: String) {
-        TODO("Not yet implemented")
+    override suspend fun getExercisesByDate(yearMonth: YearMonth): Map<String, Exercise> {
+        val startDate = "$yearMonth-01"
+        val endDate = "$yearMonth-31"
+        val exerciseEntities = exerciseDao.getExercisesByDate(startDate, endDate)
+        val exerciseInSelectedData = exerciseEntities.associateBy(
+            keySelector = { it.exercise.date },
+            valueTransform = {
+                Exercise(
+                    name = it.exercise.name,
+                    numOfSets = it.exercise.numOfSets,
+                    sets = it.setsInfo.map { setEntity ->
+                        SetInfo(
+                            weight = setEntity.weight,
+                            reps = setEntity.reps
+                        )
+                    },
+                    color = Color(it.exercise.color)
+                )
+            }
+        )
+        return exerciseInSelectedData
     }
 
     override suspend fun insertExercise(
@@ -17,6 +39,7 @@ class ExerciseRepositoryImpl(
         color: Int
     ) {
         val exerciseEntity = ExerciseEntity(
+            name = exerciseName,
             numOfSets = numOfSet,
             color = color,
             date = date
@@ -26,7 +49,7 @@ class ExerciseRepositoryImpl(
             SetEntity(
                 exerciseId = exerciseId,
                 order = idx + 1,
-                weight = set.weight.toFloat(),
+                weight = set.weight,
                 reps = set.reps
             )
         }

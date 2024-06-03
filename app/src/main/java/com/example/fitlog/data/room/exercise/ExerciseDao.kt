@@ -10,8 +10,8 @@ import androidx.room.Update
 @Dao
 interface ExerciseDao {
     @Transaction
-    @Query("SELECT * FROM exercise WHERE date = :date")
-    suspend fun getExerciseByDate(date: String): ExerciseWithSetInfo
+    @Query("SELECT * FROM exercise WHERE date >= :startDate AND date <= :endDate")
+    suspend fun getExercisesByDate(startDate: String, endDate: String): List<ExerciseWithSetInfo>
 
     @Insert
     suspend fun insertExercise(exercise: ExerciseEntity): Long
