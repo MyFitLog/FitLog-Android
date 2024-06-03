@@ -3,17 +3,19 @@ package com.example.fitlog.data.room.exercise
 import androidx.compose.ui.graphics.Color
 import com.example.fitlog.common.Exercise
 import com.example.fitlog.common.SetInfo
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class ExerciseRepositoryImpl(
     private val exerciseDao: ExerciseDao
 ) : ExerciseRepository {
-    override suspend fun getExercisesByDate(yearMonth: YearMonth): Map<String, Exercise> {
+    override suspend fun getExercisesByDate(yearMonth: YearMonth): Map<LocalDate, List<Exercise>> {
         val startDate = "$yearMonth-01"
         val endDate = "$yearMonth-31"
         val exerciseEntities = exerciseDao.getExercisesByDate(startDate, endDate)
-        val exerciseInSelectedData = exerciseEntities.associateBy(
-            keySelector = { it.exercise.date },
+        val exerciseInSelectedData = exerciseEntities.groupBy(
+            keySelector = { LocalDate.parse(it.exercise.date, DateTimeFormatter.ofPattern("yyyy-MM-dd")) },
             valueTransform = {
                 Exercise(
                     name = it.exercise.name,
