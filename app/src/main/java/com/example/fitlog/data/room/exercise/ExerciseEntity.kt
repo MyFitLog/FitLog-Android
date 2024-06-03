@@ -8,7 +8,7 @@ import androidx.room.Relation
 
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
-    @PrimaryKey(autoGenerate = true) val exerciseId: Long,
+    @PrimaryKey(autoGenerate = true) val exerciseId: Long = 0,
     val numOfSets: Int,
     val color: Int,
     val date: String,
@@ -16,7 +16,7 @@ data class ExerciseEntity(
 
 @Entity(tableName = "set_info")
 data class SetEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "set_info_id") val setInfoId: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "set_info_id") val setInfoId: Long = 0,
     val exerciseId: Long,
     val order: Int,
     val weight: Float,

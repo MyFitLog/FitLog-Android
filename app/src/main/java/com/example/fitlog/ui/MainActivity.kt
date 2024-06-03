@@ -13,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.fitlog.ui.add.AddExerciseSideEffect
 import com.example.fitlog.ui.add.AddExerciseViewModel
 import com.example.fitlog.ui.add.composable.AddExerciseScreen
 import com.example.fitlog.ui.calendar.CalendarSideEffect
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.Calendar.route) {
                         addCalendar(navController)
-                        addNewExercise()
+                        addNewExercise(navController)
                     }
                 }
             }
@@ -60,18 +61,29 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
     }
 }
 
-fun NavGraphBuilder.addNewExercise() {
+fun NavGraphBuilder.addNewExercise(navController: NavController) {
     composable(route = Screen.AddExercise.route) {
         val viewModel: AddExerciseViewModel = koinViewModel()
         val state by viewModel.collectAsState()
 
+        viewModel.collectSideEffect {
+            when (it) {
+                is AddExerciseSideEffect.navigateToCalendar -> {
+                    navController.navigate(route = Screen.Calendar.route)
+                }
+            }
+        }
+
         AddExerciseScreen(
             state = state,
             changeExerciseName = { name -> viewModel.changeExerciseName(name) },
-            changeNumOfSet = { num -> viewModel.changeNumOfSet(num) },
+            addSet = { viewModel.addSet() },
             changeReps = { idx, reps -> viewModel.changeReps(idx, reps) },
             changeWeight = { idx, weight -> viewModel.changeWeight(idx, weight) },
-            removeSetInfo = { idx -> viewModel.removeSetInfo(idx) }
+            removeSetInfo = { idx -> viewModel.removeSetInfo(idx) },
+            changeShowDialog = { viewModel.changeShowDialog() },
+            addExercise = { viewModel.addExercise() },
+            selectDay = { date -> viewModel.selectDay(date) }
         )
     }
 }

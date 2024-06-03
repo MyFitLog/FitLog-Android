@@ -10,6 +10,6 @@ data class Exercise(
 )
 
 data class SetInfo(
-    val weight: String,
-    val reps: Int,
+    val weight: String = "",
+    val reps: Int = 0,
 )
