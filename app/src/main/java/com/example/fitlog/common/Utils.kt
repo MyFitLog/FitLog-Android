@@ -10,10 +10,15 @@ import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
+import java.time.Instant
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.TextStyle
+import java.util.Date
 import java.util.Locale
 
 /**
@@ -51,20 +56,6 @@ fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
     }
     return visibleMonth.value
 }
-
-/**
- * Find first visible week in a paged week calendar **after** scrolling stops.
- */
-//@Composable
-//fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
-//    val visibleWeek = remember(state) { mutableStateOf(state.firstVisibleWeek) }
-//    LaunchedEffect(state) {
-//        snapshotFlow { state.isScrollInProgress }
-//            .filter { scrolling -> !scrolling }
-//            .collect { visibleWeek.value = state.firstVisibleWeek }
-//    }
-//    return visibleWeek.value
-//}
 
 /**
  * Find the first month on the calendar visible up to the given [viewportPercent] size.
@@ -139,3 +130,14 @@ fun isDoubleFormat(str: String): Boolean {
     val weightRegex = """^(1000(\.0+)?|0|[0-9]?[0-9]?[0-9](\.\d+)?)$""".toRegex()
     return weightRegex.matches(str)
 }
+
+fun LocalDate.toMillis(): Long = atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+
+fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDate()
+
+fun String.toMillis(): Long =
+    SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).parse(this)?.time ?: 0L
+
+fun Long.toDateString(): String =
+    SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(Date(this))

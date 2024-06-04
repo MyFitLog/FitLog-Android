@@ -1,9 +1,11 @@
 package com.example.fitlog.ui.add
 
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlog.common.SetInfo
+import com.example.fitlog.common.toDateString
 import com.example.fitlog.data.room.exercise.ExerciseRepository
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
@@ -11,13 +13,28 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 class AddExerciseViewModel(
+    date: String,
     private val exerciseRepository: ExerciseRepository
 ) : ContainerHost<AddExerciseState, AddExerciseSideEffect>, ViewModel() {
-    override val container = container<AddExerciseState, AddExerciseSideEffect>(AddExerciseState())
+    override val container =
+        container<AddExerciseState, AddExerciseSideEffect>(AddExerciseState(
+            datePickerState = DatePickerState(
+                locale = Locale.KOREA,
+                initialSelectedDateMillis = date.let {
+                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+                        timeZone = TimeZone.getTimeZone("UTC")
+                    }
+                    formatter.parse(it)?.time
+                        ?: System.currentTimeMillis() // 날짜 파싱 실패 시 현재 시간을 기본값으로 사용
+                }
+            )
+        ))
 
     fun changeExerciseName(text: String) = intent {
         reduce {
@@ -75,19 +92,13 @@ class AddExerciseViewModel(
     fun addExercise() = intent {
         viewModelScope.launch {
             exerciseRepository.insertExercise(
-                date = state.curDate.toString(),
+                date = state.datePickerState.selectedDateMillis?.toDateString() ?: "",
                 exerciseName = state.exerciseName,
                 numOfSet = state.numOfSet,
                 sets = state.setInfo,
                 color = state.color
             )
             postSideEffect(AddExerciseSideEffect.navigateToCalendar)
-        }
-    }
-
-    fun selectDay(selectedDate: LocalDate) = intent {
-        reduce {
-            state.copy(curDate = selectedDate)
         }
     }
 }
