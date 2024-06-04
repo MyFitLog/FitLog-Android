@@ -25,8 +25,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -66,9 +66,10 @@ import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
-
+import java.time.YearMonth
 
 private val toolbarColor = ToolbarColor
 private val itemBackgroundColor = ItemBackgroundColor
@@ -80,6 +81,7 @@ private val inActiveTextColor = TextGrayLight
 fun CalendarScreen(
     state: CalendarState,
     selectDay: (CalendarDay?) -> Unit,
+    fetchData: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -100,8 +102,8 @@ fun CalendarScreen(
         )
         val visibleMonth = rememberFirstCompletelyVisibleMonth(calendarState)
         LaunchedEffect(visibleMonth) {
-            // Clear selection if we scroll to a new month.
             selectDay(null)
+            fetchData(visibleMonth.yearMonth)
         }
 
         // Draw light content on dark background.
@@ -112,13 +114,13 @@ fun CalendarScreen(
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
-                    coroutineScope.launch {
-                        calendarState.animateScrollToMonth(state.currentMonth.previousMonth)
+                    coroutineScope.launch(Dispatchers.Main) {
+                        calendarState.animateScrollToMonth(visibleMonth.yearMonth.previousMonth)
                     }
                 },
                 goToNext = {
-                    coroutineScope.launch {
-                        calendarState.animateScrollToMonth(state.currentMonth.nextMonth)
+                    coroutineScope.launch(Dispatchers.Main) {
+                        calendarState.animateScrollToMonth(calendarState.firstVisibleMonth.yearMonth.nextMonth)
                     }
                 },
             )
@@ -127,7 +129,11 @@ fun CalendarScreen(
                 state = calendarState,
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
-                        val colors = emptyList<Color>()
+                        val colors = if (day.position == DayPosition.MonthDate) {
+                            state.exerciseMonthInfo[day.date].orEmpty().map { it.color }
+                        } else {
+                            emptyList()
+                        }
                         Day(
                             day = day,
                             isSelected = state.selection == day,
@@ -144,7 +150,7 @@ fun CalendarScreen(
                     )
                 },
             )
-            Divider(color = pageBackgroundColor)
+            HorizontalDivider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = state.exercisesInSelection) { exercise ->
                     ExerciseInformation(exercise = exercise)
@@ -300,7 +306,7 @@ private fun LazyItemScope.ExerciseInformation(exercise: Exercise) {
             }
         }
     }
-    Divider(color = pageBackgroundColor, thickness = 2.dp)
+    HorizontalDivider(thickness = 2.dp, color = pageBackgroundColor)
 }
 
 @Composable

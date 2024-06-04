@@ -22,6 +22,7 @@ val viewModelModule = module {
 val roomModule = module {
     single {
         Room.databaseBuilder(androidContext(), FitLogDatabase::class.java, "fitlog_database")
+            .fallbackToDestructiveMigration()
             .build()
     }
     single { get<FitLogDatabase>().exerciseDao() }
