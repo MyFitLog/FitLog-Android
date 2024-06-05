@@ -1,5 +1,6 @@
 package com.example.fitlog.ui.calendar.composable
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -22,12 +23,11 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
@@ -105,6 +105,10 @@ fun CalendarScreen(
             selectDay(null)
             fetchData(visibleMonth.yearMonth)
         }
+        LaunchedEffect(state.selection) {
+            Log.d("selection", "${state.selection}")
+        }
+
 
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
@@ -158,13 +162,13 @@ fun CalendarScreen(
             }
         }
         if (state.selection != null) {
-            FloatingActionButton(
+            IconButton(
                 onClick = { moveAddExercise() },
-                shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_add_circle),
-                    contentDescription = "add new Exercise"
+                    contentDescription = "add new Exercise",
+                    tint = Color.White
                 )
             }
         }

@@ -37,7 +37,7 @@ class CalendarViewModel(
     }
 
     fun moveToAddExercise() = intent {
-        postSideEffect(CalendarSideEffect.NavigateToAddExercise)
+        postSideEffect(CalendarSideEffect.NavigateToAddExercise(date = state.selection?.date.toString()))
     }
 
     fun fetchData(yearMonth: YearMonth) = intent {

@@ -10,9 +10,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.fitlog.ui.add.AddExerciseSideEffect
 import com.example.fitlog.ui.add.AddExerciseViewModel
 import com.example.fitlog.ui.add.composable.AddExerciseScreen
@@ -21,6 +23,7 @@ import com.example.fitlog.ui.calendar.CalendarViewModel
 import com.example.fitlog.ui.calendar.composable.CalendarScreen
 import com.example.fitlog.ui.theme.FitLogTheme
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
@@ -49,7 +52,7 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
         viewModel.collectSideEffect {
             when (it) {
                 is CalendarSideEffect.NavigateToAddExercise -> {
-                    navController.navigate(route = Screen.AddExercise.route)
+                    navController.navigate(route = Screen.AddExercise.createRoute(it.date))
                 }
             }
         }
@@ -63,8 +66,12 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
 }
 
 fun NavGraphBuilder.addNewExercise(navController: NavController) {
-    composable(route = Screen.AddExercise.route) {
-        val viewModel: AddExerciseViewModel = koinViewModel()
+    composable(
+        route = Screen.AddExercise.route,
+        arguments = listOf(navArgument("date") { type = NavType.StringType })
+    ) {
+        val date = it.arguments?.getString("date")
+        val viewModel: AddExerciseViewModel = koinViewModel(parameters = { parametersOf(date) })
         val state by viewModel.collectAsState()
 
         viewModel.collectSideEffect {
@@ -84,12 +91,13 @@ fun NavGraphBuilder.addNewExercise(navController: NavController) {
             removeSetInfo = { idx -> viewModel.removeSetInfo(idx) },
             changeShowDialog = { viewModel.changeShowDialog() },
             addExercise = { viewModel.addExercise() },
-            selectDay = { date -> viewModel.selectDay(date) }
         )
     }
 }
 
 sealed class Screen(val route: String) {
     data object Calendar : Screen(route = "calendar")
-    data object AddExercise : Screen(route = "add")
+    data object AddExercise : Screen(route = "add_exercise/{date}") {
+        fun createRoute(date: String) = "add_exercise/$date"
+    }
 }
