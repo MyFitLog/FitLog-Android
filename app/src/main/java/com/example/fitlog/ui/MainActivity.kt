@@ -84,13 +84,14 @@ fun NavGraphBuilder.addNewExercise(navController: NavController) {
 
         AddExerciseScreen(
             state = state,
-            changeExerciseName = { name -> viewModel.changeExerciseName(name) },
             addSet = { viewModel.addSet() },
             changeReps = { idx, reps -> viewModel.changeReps(idx, reps) },
             changeWeight = { idx, weight -> viewModel.changeWeight(idx, weight) },
             removeSetInfo = { idx -> viewModel.removeSetInfo(idx) },
             changeShowDialog = { viewModel.changeShowDialog() },
             addExercise = { viewModel.addExercise() },
+            selectListItem = { idx -> viewModel.selectListItem(idx) },
+            changeShowSelectableList = { value -> viewModel.changeShowSelectableList(value) }
         )
     }
 }

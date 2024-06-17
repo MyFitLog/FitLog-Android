@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.fitlog.common.SetInfo
 import com.example.fitlog.common.toDateString
 import com.example.fitlog.data.room.exercise.ExerciseRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -33,12 +34,20 @@ class AddExerciseViewModel(
                     formatter.parse(it)?.time
                         ?: System.currentTimeMillis() // 날짜 파싱 실패 시 현재 시간을 기본값으로 사용
                 }
-            )
-        ))
+            ),
+        )
+    )
 
-    fun changeExerciseName(text: String) = intent {
-        reduce {
-            state.copy(exerciseName = text)
+    init {
+        getExerciseNames()
+    }
+
+    private fun getExerciseNames() = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            val exerciseNames = listOf("운동 선택") + exerciseRepository.getExerciseNames()
+            reduce {
+                state.copy(exerciseNameList = exerciseNames)
+            }
         }
     }
 
@@ -99,6 +108,18 @@ class AddExerciseViewModel(
                 color = state.color
             )
             postSideEffect(AddExerciseSideEffect.navigateToCalendar)
+        }
+    }
+
+    fun changeShowSelectableList(value: Boolean) = intent {
+        reduce {
+            state.copy(showSelectableList = value)
+        }
+    }
+
+    fun selectListItem(index: Int) = intent {
+        reduce {
+            state.copy(selectedIndex = index)
         }
     }
 }

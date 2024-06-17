@@ -24,6 +24,11 @@ data class SetEntity(
     val reps: Int
 )
 
+@Entity(tableName = "exercise_name")
+data class ExerciseNameEntity(
+    @PrimaryKey val name: String
+)
+
 data class ExerciseWithSetInfo(
     @Embedded val exercise: ExerciseEntity,
     @Relation(

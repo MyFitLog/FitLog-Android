@@ -13,4 +13,7 @@ data class AddExerciseState @OptIn(ExperimentalMaterial3Api::class) constructor(
     val setInfo: List<SetInfo> = listOf(SetInfo("", 0)),
     val color: Int = Color.RED,
     val showDialog: Boolean = false,
+    val exerciseNameList: List<String> = listOf("선택"),
+    val showSelectableList: Boolean = false,
+    val selectedIndex: Int = 0,
 )

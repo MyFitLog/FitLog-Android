@@ -57,4 +57,6 @@ class ExerciseRepositoryImpl(
         }
         exerciseDao.insertSets(setEntityList)
     }
+
+    override suspend fun getExerciseNames(): List<String> = exerciseDao.getExerciseNames().map { it.name }
 }
