@@ -102,7 +102,7 @@ class AddExerciseViewModel(
         viewModelScope.launch {
             exerciseRepository.insertExercise(
                 date = state.datePickerState.selectedDateMillis?.toDateString() ?: "",
-                exerciseName = state.exerciseName,
+                exerciseName = state.exerciseNameList[state.selectedIndex],
                 numOfSet = state.numOfSet,
                 sets = state.setInfo,
                 color = state.color
