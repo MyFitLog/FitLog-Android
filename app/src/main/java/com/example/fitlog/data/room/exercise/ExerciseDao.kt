@@ -13,6 +13,9 @@ interface ExerciseDao {
     @Query("SELECT * FROM exercise WHERE date >= :startDate AND date <= :endDate")
     suspend fun getExercisesByDate(startDate: String, endDate: String): List<ExerciseWithSetInfo>
 
+    @Query("SELECT * FROM exercise_name")
+    suspend fun getExerciseNames(): List<ExerciseNameEntity>
+
     @Insert
     suspend fun insertExercise(exercise: ExerciseEntity): Long
 

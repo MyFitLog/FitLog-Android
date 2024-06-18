@@ -1,5 +1,6 @@
 package com.example.fitlog.ui.add.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,13 +14,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -33,13 +34,14 @@ import java.time.LocalDate
 @Composable
 fun AddExerciseScreen(
     state: AddExerciseState,
-    changeExerciseName: (String) -> Unit,
     addSet: () -> Unit,
     changeWeight: (Int, String) -> Unit,
     changeReps: (Int, Int) -> Unit,
     removeSetInfo: (Int) -> Unit,
     changeShowDialog: () -> Unit,
     addExercise: () -> Unit,
+    selectListItem: (Int) -> Unit,
+    changeShowSelectableList: (Boolean) -> Unit
 ) {
     if (state.showDialog) {
         DatePickerDialog(
@@ -75,14 +77,18 @@ fun AddExerciseScreen(
             onClick = changeShowDialog,
             label = { Text("Date") }
         )
+
         Row {
-            Box(modifier = Modifier.weight(4f)) {
-                OutlinedTextField(
-                    value = state.exerciseName,
-                    onValueChange = { changeExerciseName(it) },
-                    label = { Text(text = "운동 종목") }
-                )
-            }
+            SelectableList(
+                list = state.exerciseNameList,
+                modifier = Modifier
+                    .weight(3f)
+                    .background(Color.White),
+                selectedIndex = state.selectedIndex,
+                showSelectableList = state.showSelectableList,
+                changeShowSelectableList = { changeShowSelectableList(it) },
+                onItemClick = { selectListItem(it) }
+            )
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)

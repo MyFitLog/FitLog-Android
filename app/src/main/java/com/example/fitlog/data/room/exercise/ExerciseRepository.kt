@@ -15,4 +15,6 @@ interface ExerciseRepository {
         sets: List<SetInfo>,
         color: Int,
     )
+
+    suspend fun getExerciseNames(): List<String>
 }
