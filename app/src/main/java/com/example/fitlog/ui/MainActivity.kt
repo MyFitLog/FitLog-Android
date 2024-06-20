@@ -60,7 +60,9 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
             state = state,
             selectDay = { day -> viewModel.selectDay(day) },
             fetchData = { yearMonth -> viewModel.fetchData(yearMonth) },
-            moveAddExercise = { viewModel.moveToAddExercise() }
+            moveAddExercise = { viewModel.moveToAddExercise() },
+            removeExercise = { exerciseEntity -> viewModel.deleteExercise(exerciseEntity) }
+//            changeShowAlertDialog = { value -> viewModel.changeShowAlertDialog(value) }
         )
     }
 }

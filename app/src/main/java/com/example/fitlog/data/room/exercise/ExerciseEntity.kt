@@ -18,7 +18,7 @@ data class ExerciseEntity(
 @Entity(tableName = "set_info")
 data class SetEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "set_info_id") val setInfoId: Long = 0,
-    val exerciseId: Long,
+    val exerciseId: Long = 0,
     val order: Int,
     val weight: String,
     val reps: Int

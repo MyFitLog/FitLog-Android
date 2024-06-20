@@ -1,6 +1,5 @@
 package com.example.fitlog.ui.calendar.composable
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.HorizontalDivider
@@ -39,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.fitlog.R
 import com.example.fitlog.common.displayText
 import com.example.fitlog.common.rememberFirstCompletelyVisibleMonth
+import com.example.fitlog.data.room.exercise.ExerciseEntity
 import com.example.fitlog.ui.calendar.CalendarState
 import com.example.fitlog.ui.theme.ItemBackgroundColor
 import com.example.fitlog.ui.theme.PageBackgroundColor
@@ -70,6 +68,8 @@ fun CalendarScreen(
     selectDay: (CalendarDay?) -> Unit,
     fetchData: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
+    removeExercise: (ExerciseEntity) -> Unit,
+//    changeShowAlertDialog: (Boolean) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     Column(
@@ -90,10 +90,6 @@ fun CalendarScreen(
             selectDay(null)
             fetchData(visibleMonth.yearMonth)
         }
-        LaunchedEffect(state.selection) {
-            Log.d("selection", "${state.selection}")
-        }
-
 
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
@@ -119,7 +115,7 @@ fun CalendarScreen(
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            state.exerciseMonthInfo[day.date].orEmpty().map { it.color }
+                            state.exerciseEntityMonthInfo[day.date].orEmpty().map { Color(it.exercise.color) }
                         } else {
                             emptyList()
                         }
@@ -140,10 +136,25 @@ fun CalendarScreen(
                 },
             )
             HorizontalDivider(color = pageBackgroundColor)
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(items = state.exercisesInSelection) { exercise ->
-                    ExerciseInformation(exercise = exercise)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                state.exerciseEntityMonthInfo[state.selection?.date]?.let {
+                    it.forEach { exercise ->
+                        ExerciseInformation(
+                            exerciseWithSetInfo = exercise,
+                            removeExercise = removeExercise,
+//                        showAlertDialog = state.showAlertDialog,
+//                        changeShowAlertDialog = changeShowAlertDialog
+                        )
+                    }
                 }
+//                state.exercisesInSelection.forEach { exercise ->
+//                    ExerciseInformation(
+//                        exerciseWithSetInfo = exercise,
+//                        removeExercise = removeExercise,
+////                        showAlertDialog = state.showAlertDialog,
+////                        changeShowAlertDialog = changeShowAlertDialog
+//                    )
+//                }
             }
         }
         if (state.selection != null) {
@@ -157,7 +168,6 @@ fun CalendarScreen(
                 )
             }
         }
-
     }
 
 }
