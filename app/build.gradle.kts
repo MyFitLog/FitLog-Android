@@ -89,6 +89,9 @@ dependencies {
     val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
+    // retrofit2
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+
     // Tests
     testImplementation("org.orbit-mvi:orbit-test:7.1.0")
 }
