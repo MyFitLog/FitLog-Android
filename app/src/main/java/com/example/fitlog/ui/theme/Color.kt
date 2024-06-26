@@ -15,3 +15,6 @@ val ItemBackgroundColor = Color(0xFF1B1B1B)
 val PageBackgroundColor = Color(0xFF0E0E0E)
 val TextGray = Color(0xFFDCDCDC)
 val TextGrayLight = Color(0xFF616161)
+
+val RemoveRed = Color(0xFFEF5350)
+val EditGreen = Color(0xFF66BB6A)

@@ -25,14 +25,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.fitlog.R
 import com.example.fitlog.common.MyTextField
-import com.example.fitlog.common.SetInfo
 import com.example.fitlog.common.isDoubleFormat
+import com.example.fitlog.data.room.exercise.SetEntity
 import kotlinx.coroutines.launch
 
 @Composable
 fun SetInfoList(
     numOfSet: Int,
-    setInfo: List<SetInfo>,
+    setInfo: List<SetEntity>,
     addSet: () -> Unit,
     changeWeight: (Int, String) -> Unit,
     changeReps: (Int, Int) -> Unit,
