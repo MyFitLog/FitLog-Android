@@ -2,8 +2,8 @@ package com.example.fitlog.ui.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitlog.data.room.exercise.ExerciseEntity
-import com.example.fitlog.data.room.exercise.ExerciseRepository
+import com.example.fitlog.data.model.exercise.dto.Exercise
+import com.example.fitlog.data.model.exercise.repository.ExerciseRepository
 import com.kizitonwose.calendar.core.CalendarDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,15 +38,15 @@ class CalendarViewModel(
 
     fun fetchData(yearMonth: YearMonth) = intent {
         viewModelScope.launch(Dispatchers.IO) {
-            val exerciseInSelectedData = exerciseRepository.getExercisesByDate(yearMonth)
+            val exerciseInSelectedData = exerciseRepository.getExerciseByDate(yearMonth)
             reduce {
                 state.copy(exerciseEntityMonthInfo = exerciseInSelectedData)
             }
         }
     }
 
-    fun deleteExercise(exerciseEntity: ExerciseEntity) = intent {
-        exerciseRepository.removeExercise(exerciseEntity)
+    fun deleteExercise(exercise: Exercise) = intent {
+        exerciseRepository.deleteExercise(exercise.id!!)
         fetchData(state.currentMonth)
     }
 }
