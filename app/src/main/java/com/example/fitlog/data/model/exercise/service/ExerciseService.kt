@@ -1,6 +1,7 @@
 package com.example.fitlog.data.model.exercise.service
 
 import com.example.fitlog.data.model.exercise.dto.Exercise
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -12,7 +13,7 @@ interface ExerciseService {
     suspend fun getExerciseNames(): List<String>
 
     @POST("api/exercise")
-    suspend fun addExercise(exercise: Exercise)
+    suspend fun addExercise(@Body exercise: Exercise)
 
     @DELETE("api/exercise")
     suspend fun deleteExerciseById(id: Long)

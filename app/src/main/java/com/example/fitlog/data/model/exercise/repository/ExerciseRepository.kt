@@ -22,6 +22,4 @@ class ExerciseRepository(
             valueTransform = { it }
         )
     }
-
-
 }
