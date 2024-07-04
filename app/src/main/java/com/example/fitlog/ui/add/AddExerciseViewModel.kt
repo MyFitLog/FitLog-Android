@@ -107,7 +107,7 @@ class AddExerciseViewModel(
                     numOfSets = state.numOfSet,
                     color = state.color,
                     date = state.datePickerState.selectedDateMillis?.toDateString() ?: "",
-                    setInfo = state.setInfo
+                    setInfos = state.setInfo
                 ),
             )
             postSideEffect(AddExerciseSideEffect.navigateToCalendar)

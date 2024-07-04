@@ -165,7 +165,7 @@ fun ExerciseInformation(
             exit = shrinkVertically(tween(400))
         ) {
             Column {
-                exercise.setInfo.mapIndexed { index, exerciseSet ->
+                exercise.setInfos.mapIndexed { index, exerciseSet ->
                     ExerciseSetInformation(
                         setInfo = exerciseSet,
                         setNum = index + 1

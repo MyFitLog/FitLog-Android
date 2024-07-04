@@ -15,12 +15,17 @@ interface ExerciseService {
     @POST("api/exercise")
     suspend fun addExercise(@Body exercise: Exercise)
 
-    @DELETE("api/exercise")
-    suspend fun deleteExerciseById(id: Long)
+    @DELETE("api/exercise/{id}")
+    suspend fun deleteExerciseById(
+        @Path("id") id: Long
+    )
 
     @PUT("api/exercise")
     suspend fun updateExercise(exercise: Exercise)
 
     @GET("api/exercise/{startDate}/{endDate}")
-    suspend fun getExerciseByDate(@Path("startDate") startDate: String, @Path("endDate") endDate: String): List<Exercise>
+    suspend fun getExerciseByDate(
+        @Path("startDate") startDate: String,
+        @Path("endDate") endDate: String
+    ): List<Exercise>
 }

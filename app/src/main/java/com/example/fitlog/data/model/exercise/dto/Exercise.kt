@@ -6,7 +6,7 @@ data class Exercise(
     val numOfSets: Int,
     val color: Int,
     val date: String,
-    val setInfo: List<SetInfo>
+    val setInfos: List<SetInfo>
 )
 
 data class SetInfo(
