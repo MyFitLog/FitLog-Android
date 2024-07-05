@@ -20,6 +20,15 @@ val dataModule = module {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+//            .client(OkHttpClient.Builder().apply {
+//                addInterceptor { chain ->
+//                    val response = chain.proceed(chain.request())
+//                    if (!response.isSuccessful) {
+//                        Log.d("Retrofit Interceptor", "fail: ${chain.request().method()} ${chain.request().body()}")
+//                    }
+//                    response.newBuilder().build()
+//                }
+//            }.build())
             .build()
     }
     single { get<Retrofit>().create(ExerciseService::class.java) }
