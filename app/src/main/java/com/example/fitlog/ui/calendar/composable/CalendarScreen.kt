@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.fitlog.R
 import com.example.fitlog.common.displayText
 import com.example.fitlog.common.rememberFirstCompletelyVisibleMonth
-import com.example.fitlog.data.room.exercise.ExerciseEntity
+import com.example.fitlog.data.model.exercise.dto.Exercise
 import com.example.fitlog.ui.calendar.CalendarState
 import com.example.fitlog.ui.theme.ItemBackgroundColor
 import com.example.fitlog.ui.theme.PageBackgroundColor
@@ -68,7 +68,7 @@ fun CalendarScreen(
     selectDay: (CalendarDay?) -> Unit,
     fetchData: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
-    removeExercise: (ExerciseEntity) -> Unit,
+    removeExercise: (Exercise) -> Unit,
 //    changeShowAlertDialog: (Boolean) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -115,7 +115,7 @@ fun CalendarScreen(
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            state.exerciseEntityMonthInfo[day.date].orEmpty().map { Color(it.exercise.color) }
+                            state.exerciseEntityMonthInfo[day.date].orEmpty().map { Color(it.color) }
                         } else {
                             emptyList()
                         }
@@ -140,7 +140,7 @@ fun CalendarScreen(
                 state.exerciseEntityMonthInfo[state.selection?.date]?.let {
                     it.forEach { exercise ->
                         ExerciseInformation(
-                            exerciseWithSetInfo = exercise,
+                            exercise = exercise,
                             removeExercise = removeExercise,
 //                        showAlertDialog = state.showAlertDialog,
 //                        changeShowAlertDialog = changeShowAlertDialog

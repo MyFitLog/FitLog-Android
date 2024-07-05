@@ -1,6 +1,6 @@
 package com.example.fitlog.ui.calendar
 
-import com.example.fitlog.data.room.exercise.ExerciseWithSetInfo
+import com.example.fitlog.data.model.exercise.dto.Exercise
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
@@ -14,7 +14,7 @@ data class CalendarState(
     val firstVisibleMonth: YearMonth = currentMonth,                        //  현재 년월
     val firstDayOfWeek: DayOfWeek = daysOfWeek().first(),                   // 표시할 가장 첫번째 요일 현재는 일용리
     val selection: CalendarDay? = null,                                     // 선택된 날짜
-    val exerciseEntityMonthInfo: Map<LocalDate, List<ExerciseWithSetInfo>> = mapOf(),   // 현재 달의 저장된 운동 기록 목록
+    val exerciseEntityMonthInfo: Map<LocalDate, List<Exercise>> = mapOf(),   // 현재 달의 저장된 운동 기록 목록
 //    val exercisesInSelectedDate: List<ExerciseEntity> = emptyList(),
 //    val exercisesInSelection: List<ExerciseWithSetInfo> = emptyList(),      // 현재 선택한 날짜의 운동 기록
 )

@@ -5,9 +5,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlog.common.toDateString
-import com.example.fitlog.data.room.exercise.ExerciseEntity
-import com.example.fitlog.data.room.exercise.ExerciseRepository
-import com.example.fitlog.data.room.exercise.SetEntity
+import com.example.fitlog.data.model.exercise.dto.Exercise
+import com.example.fitlog.data.model.exercise.dto.SetInfo
+import com.example.fitlog.data.model.exercise.repository.ExerciseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
@@ -55,8 +55,8 @@ class AddExerciseViewModel(
     fun addSet() = intent {
         val curNumOfSet = state.numOfSet
         val newSet =
-            if (state.numOfSet == 0) SetEntity(order = curNumOfSet, weight = "", reps = 0)
-            else SetEntity(order = curNumOfSet, weight = state.setInfo.last().weight, reps = state.setInfo.last().reps)
+            if (state.numOfSet == 0) SetInfo(weight = "", reps = 0)
+            else SetInfo(weight = state.setInfo.last().weight, reps = state.setInfo.last().reps)
         val info = state.setInfo + newSet
         reduce {
             state.copy(numOfSet = curNumOfSet + 1, setInfo = info)
@@ -101,14 +101,14 @@ class AddExerciseViewModel(
 
     fun addExercise() = intent {
         viewModelScope.launch {
-            exerciseRepository.insertExercise(
-                exerciseEntity = ExerciseEntity(
+            exerciseRepository.addExercise(
+                Exercise(
                     name = state.exerciseNameList[state.selectedIndex],
                     numOfSets = state.numOfSet,
                     color = state.color,
                     date = state.datePickerState.selectedDateMillis?.toDateString() ?: "",
+                    setInfos = state.setInfo
                 ),
-                listOfSet = state.setInfo
             )
             postSideEffect(AddExerciseSideEffect.navigateToCalendar)
         }

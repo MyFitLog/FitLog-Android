@@ -1,8 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { stream ->
+        localProperties.load(stream)
+    }
+}
+
+val baseUrl: String = localProperties.getProperty("BASE_URL")
 
 android {
     namespace = "com.example.fitlog"
@@ -11,7 +23,7 @@ android {
     defaultConfig {
         applicationId = "com.example.fitlog"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -22,7 +34,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"${baseUrl}\"")
+        }
         release {
+            buildConfigField("String", "BASE_URL", "\"${baseUrl}\"")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -36,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.13"
@@ -88,6 +105,10 @@ dependencies {
     // navigation
     val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$navVersion")
+
+    // retrofit2
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
     // Tests
     testImplementation("org.orbit-mvi:orbit-test:7.1.0")
