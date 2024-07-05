@@ -51,8 +51,6 @@ import com.example.fitlog.ui.theme.RemoveRed
 fun ExerciseInformation(
     exercise: Exercise,
     removeExercise: (Exercise) -> Unit,
-//    showAlertDialog: Boolean,
-//    changeShowAlertDialog: (Boolean) -> Unit,
 ) {
     val state = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -71,7 +69,6 @@ fun ExerciseInformation(
             }
         }
     )
-
 
     var expanded by remember { mutableStateOf(false) }
     SwipeToDismissBox(
@@ -159,22 +156,23 @@ fun ExerciseInformation(
                 )
             }
         }
-        AnimatedVisibility(
-            visible = expanded,
-            enter = expandVertically(tween(400)),
-            exit = shrinkVertically(tween(400))
-        ) {
-            Column {
-                exercise.setInfos.mapIndexed { index, exerciseSet ->
-                    ExerciseSetInformation(
-                        setInfo = exerciseSet,
-                        setNum = index + 1
-                    )
-                }
+
+    }
+    AnimatedVisibility(
+        visible = expanded,
+        enter = expandVertically(tween(400)),
+        exit = shrinkVertically(tween(400))
+    ) {
+        Column {
+            exercise.setInfos.mapIndexed { index, exerciseSet ->
+                ExerciseSetInformation(
+                    setInfo = exerciseSet,
+                    setNum = index + 1
+                )
             }
         }
-        HorizontalDivider(thickness = 2.dp, color = PageBackgroundColor)
     }
+    HorizontalDivider(thickness = 2.dp, color = PageBackgroundColor)
 }
 
 @Composable
@@ -185,6 +183,7 @@ fun ExerciseSetInformation(
     Row(
         modifier = Modifier
             .height(IntrinsicSize.Max)
+//            .height(40.dp)
     ) {
         Box(
             modifier = Modifier
