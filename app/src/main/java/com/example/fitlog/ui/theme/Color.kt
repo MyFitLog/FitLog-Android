@@ -9,3 +9,12 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+val ToolbarColor = Color(0xFF282828)
+val ItemBackgroundColor = Color(0xFF1B1B1B)
+val PageBackgroundColor = Color(0xFF0E0E0E)
+val TextGray = Color(0xFFDCDCDC)
+val TextGrayLight = Color(0xFF616161)
+
+val RemoveRed = Color(0xFFEF5350)
+val EditGreen = Color(0xFF66BB6A)
