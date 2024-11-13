@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlog.data.model.exercise.dto.Exercise
 import com.example.fitlog.data.model.exercise.repository.ExerciseRepository
-import com.kizitonwose.calendar.core.CalendarDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
@@ -12,6 +11,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import java.time.LocalDate
 import java.time.YearMonth
 
 class CalendarViewModel(
@@ -23,7 +23,7 @@ class CalendarViewModel(
         fetchData(YearMonth.now())
     }
 
-    fun selectDay(day: CalendarDay?) = intent {
+    fun selectDay(day: LocalDate?) = intent {
         val curSelection = state.selection
         val selection = if (curSelection == day) null else day
 
@@ -32,8 +32,14 @@ class CalendarViewModel(
         }
     }
 
+    fun moveMonth(nextYearMonth: YearMonth) = intent {
+        reduce {
+            state.copy(currentMonth = nextYearMonth)
+        }
+    }
+
     fun moveToAddExercise() = intent {
-        postSideEffect(CalendarSideEffect.NavigateToAddExercise(date = state.selection?.date.toString()))
+        postSideEffect(CalendarSideEffect.NavigateToAddExercise(date = state.selection.toString()))
     }
 
     fun fetchData(yearMonth: YearMonth) = intent {

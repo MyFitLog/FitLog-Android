@@ -87,9 +87,6 @@ dependencies {
     implementation("org.orbit-mvi:orbit-viewmodel:7.1.0")
     implementation("org.orbit-mvi:orbit-compose:7.1.0")
 
-    // kizitonwose-calendar
-    implementation("com.kizitonwose.calendar:compose:2.5.1")
-
     // room
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
