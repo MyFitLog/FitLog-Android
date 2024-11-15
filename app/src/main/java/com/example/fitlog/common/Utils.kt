@@ -1,7 +1,7 @@
 package com.example.fitlog.common
 
 import androidx.compose.ui.graphics.Color
-import com.example.fitlog.data.model.exercise.dto.Exercise
+import com.example.fitlog.data.model.exercise.entity.ExerciseWithSetInfo
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -47,13 +47,13 @@ fun getPreviousLastDate(year: Int, month: Int) = YearMonth.of(year, month).minus
 
 fun convertToMonthlyColorList(
     yearMonth: YearMonth,
-    exerciseEntityMonthInfo: Map<LocalDate, List<Exercise>>
+    exerciseEntityMonthInfo: Map<LocalDate, List<ExerciseWithSetInfo>>
 ): List<List<Color>> {
 //    val TAG = "UTILS - convertToMonthlyColorList"
     val daysInMonth = yearMonth.lengthOfMonth()
     return (1..daysInMonth).map { day ->
         val date = LocalDate.of(yearMonth.year, yearMonth.monthValue, day)
-        exerciseEntityMonthInfo[date]?.map { Color(it.color) } ?: emptyList()
+        exerciseEntityMonthInfo[date]?.map { Color(it.exercise.color) } ?: emptyList()
     }
 }
 

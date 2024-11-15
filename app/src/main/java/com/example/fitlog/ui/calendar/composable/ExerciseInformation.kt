@@ -39,8 +39,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitlog.R
-import com.example.fitlog.data.model.exercise.dto.Exercise
-import com.example.fitlog.data.model.exercise.dto.SetInfo
+import com.example.fitlog.data.model.exercise.entity.ExerciseEntity
+import com.example.fitlog.data.model.exercise.entity.ExerciseWithSetInfo
+import com.example.fitlog.data.model.exercise.entity.SetEntity
 import com.example.fitlog.ui.theme.EditGreen
 import com.example.fitlog.ui.theme.ItemBackgroundColor
 import com.example.fitlog.ui.theme.PageBackgroundColor
@@ -49,8 +50,8 @@ import com.example.fitlog.ui.theme.RemoveRed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseInformation(
-    exercise: Exercise,
-    removeExercise: (Exercise) -> Unit,
+    exerciseWithSetInfo: ExerciseWithSetInfo,
+    removeExercise: (ExerciseEntity) -> Unit,
 ) {
     val state = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -63,7 +64,7 @@ fun ExerciseInformation(
 
                 SwipeToDismissBoxValue.EndToStart -> {
                     // 삭제
-                    removeExercise(exercise)
+                    removeExercise(exerciseWithSetInfo.exercise)
                     false
                 }
             }
@@ -123,7 +124,7 @@ fun ExerciseInformation(
         ) {
             Box(
                 modifier = Modifier
-                    .background(color = Color(exercise.color))
+                    .background(color = Color(exerciseWithSetInfo.exercise.color))
 //                .fillParentMaxWidth(1 / 18f)
                     .aspectRatio(1 / 3f)
             )
@@ -135,7 +136,7 @@ fun ExerciseInformation(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = exercise.name,
+                    text = exerciseWithSetInfo.exercise.name,
                     textAlign = TextAlign.Center,
                     lineHeight = 17.sp,
                     fontSize = 15.sp,
@@ -149,7 +150,7 @@ fun ExerciseInformation(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "${exercise.numOfSets} 세트",
+                    text = "${exerciseWithSetInfo.exercise.numOfSets} 세트",
                     textAlign = TextAlign.Center,
                     lineHeight = 17.sp,
                     fontSize = 15.sp,
@@ -164,7 +165,7 @@ fun ExerciseInformation(
         exit = shrinkVertically(tween(400))
     ) {
         Column {
-            exercise.setInfos.mapIndexed { index, exerciseSet ->
+            exerciseWithSetInfo.setsInfo.mapIndexed { index, exerciseSet ->
                 ExerciseSetInformation(
                     setInfo = exerciseSet,
                     setNum = index + 1
@@ -177,7 +178,7 @@ fun ExerciseInformation(
 
 @Composable
 fun ExerciseSetInformation(
-    setInfo: SetInfo,
+    setInfo: SetEntity,
     setNum: Int
 ) {
     Row(

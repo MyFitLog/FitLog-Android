@@ -5,8 +5,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fitlog.common.toDateString
-import com.example.fitlog.data.model.exercise.dto.Exercise
-import com.example.fitlog.data.model.exercise.dto.SetInfo
+import com.example.fitlog.data.model.exercise.entity.ExerciseEntity
+import com.example.fitlog.data.model.exercise.entity.SetEntity
 import com.example.fitlog.data.model.exercise.repository.ExerciseRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,8 +55,12 @@ class AddExerciseViewModel(
     fun addSet() = intent {
         val curNumOfSet = state.numOfSet
         val newSet =
-            if (state.numOfSet == 0) SetInfo(weight = "", reps = 0)
-            else SetInfo(weight = state.setInfo.last().weight, reps = state.setInfo.last().reps)
+            if (state.numOfSet == 0) SetEntity(weight = "", order = 0, reps = 0)
+            else SetEntity(
+                weight = state.setInfo.last().weight,
+                order = state.numOfSet,
+                reps = state.setInfo.last().reps
+            )
         val info = state.setInfo + newSet
         reduce {
             state.copy(numOfSet = curNumOfSet + 1, setInfo = info)
@@ -101,14 +105,14 @@ class AddExerciseViewModel(
 
     fun addExercise() = intent {
         viewModelScope.launch {
-            exerciseRepository.addExercise(
-                Exercise(
+            exerciseRepository.insertExercise(
+                ExerciseEntity(
                     name = state.exerciseNameList[state.selectedIndex],
                     numOfSets = state.numOfSet,
                     color = state.color,
-                    date = state.datePickerState.selectedDateMillis?.toDateString() ?: "",
-                    setInfos = state.setInfo
+                    date = state.datePickerState.selectedDateMillis?.toDateString() ?: ""
                 ),
+                state.setInfo
             )
             postSideEffect(AddExerciseSideEffect.navigateToCalendar)
         }

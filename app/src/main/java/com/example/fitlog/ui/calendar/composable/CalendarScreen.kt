@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.fitlog.R
 import com.example.fitlog.common.convertToMonthlyColorList
-import com.example.fitlog.data.model.exercise.dto.Exercise
+import com.example.fitlog.data.model.exercise.entity.ExerciseEntity
 import com.example.fitlog.ui.calendar.CalendarState
 import com.example.fitlog.ui.theme.PageBackgroundColor
 import com.example.fitlog.ui.theme.ToolbarColor
@@ -37,7 +37,7 @@ fun CalendarScreen(
     fetchData: (YearMonth) -> Unit,
     moveMonth: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
-    removeExercise: (Exercise) -> Unit,
+    removeExercise: (ExerciseEntity) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -97,7 +97,7 @@ fun CalendarScreen(
                 state.exerciseEntityMonthInfo[state.selection]?.let {
                     it.forEach { exercise ->
                         ExerciseInformation(
-                            exercise = exercise,
+                            exerciseWithSetInfo = exercise,
                             removeExercise = removeExercise,
                         )
                     }
