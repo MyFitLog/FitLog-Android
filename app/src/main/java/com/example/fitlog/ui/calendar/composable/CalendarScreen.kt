@@ -64,7 +64,9 @@ fun CalendarScreen(
             CalendarGrid(
                 year = state.currentMonth.year,
                 month = state.currentMonth.month.value,
-                exerciseColors = convertToMonthlyColorList(state.currentMonth, state.exerciseEntityMonthInfo)
+                exerciseColors = convertToMonthlyColorList(state.currentMonth, state.exerciseEntityMonthInfo),
+                selection = state.selection,
+                selectDay = selectDay
             )
 //            HorizontalCalendar(
 //                modifier = Modifier.wrapContentWidth(),

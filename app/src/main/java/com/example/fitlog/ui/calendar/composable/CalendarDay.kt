@@ -2,6 +2,7 @@ package com.example.fitlog.ui.calendar.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,22 +17,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitlog.ui.theme.ItemBackgroundColor
+import java.time.LocalDate
+
+val selectedBorderColor = Color.White
+val unSelectedBorderColor = Color.Black
 
 @Composable
 fun CalendarDay(
-    day: Int,
+    modifier: Modifier,
+    isSelected: Boolean,
+    isClickable: Boolean,
+    localDate: LocalDate,
     dayColor: Color,
-    exerciseColors: List<Color>
+    exerciseColors: List<Color>,
+    selectDay: (LocalDate?) -> Unit,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .background(ItemBackgroundColor)
-            .border(1.dp, Color.Transparent)
+            .border(1.dp, if (isSelected) selectedBorderColor else unSelectedBorderColor)
+            .let {
+                if (isClickable) it.clickable { selectDay(localDate) }
+                else it
+            }
     ) {
         Text(
-            text = day.toString(),
+            text = localDate.dayOfMonth.toString(),
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(4.dp),
