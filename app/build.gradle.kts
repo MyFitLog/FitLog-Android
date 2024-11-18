@@ -109,4 +109,15 @@ dependencies {
 
     // Tests
     testImplementation("org.orbit-mvi:orbit-test:7.1.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("app.cash.turbine:turbine:0.12.1")   // flow test
+
+    // Koin Test 모듈
+    testImplementation("io.insert-koin:koin-test:3.5.0")
+    testImplementation("io.insert-koin:koin-test-junit4:3.5.0") // JUnit4 사용 시
+
+    // mockito
+    testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }
