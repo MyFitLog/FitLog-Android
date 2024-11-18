@@ -47,7 +47,7 @@ fun CalendarDay(
             text = localDate.dayOfMonth.toString(),
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(4.dp),
+                .padding(horizontal = 4.dp),
             color = dayColor,
             fontSize = 12.sp
         )
