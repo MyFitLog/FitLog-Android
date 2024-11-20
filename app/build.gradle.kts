@@ -116,6 +116,9 @@ dependencies {
     testImplementation("io.insert-koin:koin-test:3.5.0")
     testImplementation("io.insert-koin:koin-test-junit4:3.5.0") // JUnit4 사용 시
 
+    // Orbit Test 모듈\
+    testImplementation("org.orbit-mvi:orbit-test:7.1.0")
+
     // mockito
     testImplementation("org.mockito:mockito-core:5.5.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
