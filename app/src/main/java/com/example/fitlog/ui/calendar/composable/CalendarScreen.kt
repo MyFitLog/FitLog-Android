@@ -37,8 +37,12 @@ fun CalendarScreen(
     fetchData: (YearMonth) -> Unit,
     moveMonth: (YearMonth) -> Unit,
     moveAddExercise: () -> Unit,
-    removeExercise: (ExerciseEntity) -> Unit,
+    deleteExerciseAndFetchData: (ExerciseEntity, YearMonth) -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        fetchData(YearMonth.now())
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +104,8 @@ fun CalendarScreen(
                     it.forEach { exercise ->
                         ExerciseInformation(
                             exerciseWithSetInfo = exercise,
-                            removeExercise = removeExercise,
+                            curMonth = state.currentMonth,
+                            deleteExerciseAndFetchData = deleteExerciseAndFetchData,
                         )
                     }
                 }

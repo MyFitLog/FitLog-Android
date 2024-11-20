@@ -46,12 +46,14 @@ import com.example.fitlog.ui.theme.EditGreen
 import com.example.fitlog.ui.theme.ItemBackgroundColor
 import com.example.fitlog.ui.theme.PageBackgroundColor
 import com.example.fitlog.ui.theme.RemoveRed
+import java.time.YearMonth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExerciseInformation(
     exerciseWithSetInfo: ExerciseWithSetInfo,
-    removeExercise: (ExerciseEntity) -> Unit,
+    curMonth: YearMonth,
+    deleteExerciseAndFetchData: (ExerciseEntity, YearMonth) -> Unit,
 ) {
     val state = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -64,7 +66,7 @@ fun ExerciseInformation(
 
                 SwipeToDismissBoxValue.EndToStart -> {
                     // 삭제
-                    removeExercise(exerciseWithSetInfo.exercise)
+                    deleteExerciseAndFetchData(exerciseWithSetInfo.exercise, curMonth)
                     false
                 }
             }

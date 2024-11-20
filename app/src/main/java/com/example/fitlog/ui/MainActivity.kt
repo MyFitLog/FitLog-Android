@@ -62,7 +62,12 @@ fun NavGraphBuilder.addCalendar(navController: NavController) {
             fetchData = { yearMonth -> viewModel.fetchData(yearMonth) },
             moveMonth = { nextYearMonth -> viewModel.moveMonth(nextYearMonth) },
             moveAddExercise = { viewModel.moveToAddExercise() },
-            removeExercise = { exerciseEntity -> viewModel.deleteExercise(exerciseEntity) }
+            deleteExerciseAndFetchData = { exerciseEntity, yearMonth ->
+                viewModel.deleteExerciseAndFetchData(
+                    exerciseEntity,
+                    yearMonth
+                )
+            }
         )
     }
 }

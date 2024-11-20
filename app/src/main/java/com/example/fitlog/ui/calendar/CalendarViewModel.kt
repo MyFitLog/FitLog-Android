@@ -1,11 +1,10 @@
 package com.example.fitlog.ui.calendar
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.fitlog.data.model.exercise.entity.ExerciseEntity
 import com.example.fitlog.data.model.exercise.repository.ExerciseRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -18,10 +17,6 @@ class CalendarViewModel(
     private val exerciseRepository: ExerciseRepository
 ) : ContainerHost<CalendarState, CalendarSideEffect>, ViewModel() {
     override val container = container<CalendarState, CalendarSideEffect>(CalendarState())
-
-    init {
-        fetchData(YearMonth.now())
-    }
 
     fun selectDay(day: LocalDate?) = intent {
         val curSelection = state.selection
@@ -43,16 +38,22 @@ class CalendarViewModel(
     }
 
     fun fetchData(yearMonth: YearMonth) = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            val exerciseInSelectedData = exerciseRepository.getExercisesByDate(yearMonth)
-            reduce {
-                state.copy(exerciseEntityMonthInfo = exerciseInSelectedData)
-            }
+        val exerciseInSelectedData = withContext(Dispatchers.IO) {
+            exerciseRepository.getExercisesByDate(yearMonth)
+        }
+        reduce {
+            state.copy(exerciseEntityMonthInfo = exerciseInSelectedData)
         }
     }
 
     fun deleteExercise(exercise: ExerciseEntity) = intent {
-        exerciseRepository.removeExercise(exercise)
-        fetchData(state.currentMonth)
+        withContext(Dispatchers.IO) {
+            exerciseRepository.removeExercise(exercise)
+        }
+    }
+
+    fun deleteExerciseAndFetchData(exercise: ExerciseEntity, yearMonth: YearMonth) = intent {
+        deleteExercise(exercise)
+        fetchData(yearMonth)
     }
 }
